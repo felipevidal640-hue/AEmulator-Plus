@@ -29,6 +29,19 @@ This does not relicense independently licensed dependencies or user firmware.
 See [build/source instructions](docs/build-source.md) and the
 [source/licensing audit](docs/license-audit.md).
 
+## Dated modifications
+
+- **2026-10-04**: fork of Sunset `0.0.0.3-sunset.30`; Plus application changes
+  (settings, importers, UI, helper bridges) from this date onward.
+- **2026-10-11**: host microphone input. Added the host-side bridge
+  (`app/src/main/java/app/aemu/core/MicBridge.kt`, `MicProtocol.kt`), the
+  guest-side channel in `native/audiohal/audio_hal.c` and rebuilt the six
+  `app/src/main/assets/engines/kk/audio.primary.*.so` libraries from that
+  source with `native/audiohal/build-zig.sh` (LLVM/`zig cc`, no NDK). These six
+  binaries are now reproducible from source tracked in this repository;
+  `audio.primary.default.so` (the inherited HTC-layout HAL for Sense ROMs) is
+  unchanged and still has no source mapping here.
+
 **Unresolved source-provenance gap:** this checkout contains inherited prebuilt
 engine binaries for which matching source, patches and build instructions have
 not been located or verified. The tagged checkout can rebuild the APK using

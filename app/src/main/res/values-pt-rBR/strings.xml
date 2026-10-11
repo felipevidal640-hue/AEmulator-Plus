@@ -212,6 +212,9 @@
     <string name="update_open_github">Ver no GitHub</string>
     <string name="vs_camera">Câmera do host (experimental)</string>
     <string name="vs_camera_sub">ROMs HAL1: prévia e fotos de 640×480, câmera traseira/frontal. Requer permissão e uma reinicialização completa da VM. A câmera fecha quando o AEmulator vai para segundo plano; abra de novo o app de câmera do convidado. Sem gravação de vídeo.</string>
+    <string name="vs_microphone">Microfone do host (experimental)</string>
+    <string name="vs_microphone_sub">Apps convidados gravam com o microfone do telefone (gravador, notas). Requer permissão e uma reinicialização completa da VM. A gravação para quando o AEmulator vai para segundo plano; abra de novo o app de gravação do convidado. Só ROMs 4.x.</string>
+    <string name="microphone_permission_denied">Permissão de microfone negada. Os apps convidados vão gravar silêncio; conceda a permissão nas configurações do app no Android e reinicie completamente a VM para tentar de novo.</string>
     <string name="camera_permission_denied">Permissão da câmera negada. A ROM vai iniciar sem acesso à câmera do host; conceda a permissão nas configurações do app no Android e reinicie completamente a VM para tentar de novo.</string>
     <string name="vs_skip_setup">Pular o assistente de configuração</string>
     <string name="vs_skip_setup_sub">Marca a configuração como concluída e desativa os apps de configuração reconhecidos na próxima inicialização completa. Desativar não desfaz uma configuração já concluída. O suporte pode variar conforme o fabricante.</string>

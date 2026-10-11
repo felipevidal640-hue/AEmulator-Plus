@@ -168,12 +168,16 @@ class VmActivity : ComponentActivity() {
     private var cutoutInsets = androidx.core.graphics.Insets.NONE
     private var orientationListener: android.view.OrientationEventListener? = null
     private var updateGuestLayout: (() -> Unit)? = null
-    /** Camera and Bluetooth are requested together so the VM boots once, after the person has answered. */
+    /** Camera, microphone and Bluetooth are requested together so the VM boots once, after the person has answered. */
     private val hostPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
         if (::vm.isInitialized) {
             result[android.Manifest.permission.CAMERA]?.let { granted ->
                 vm.log("camera: host permission ${if (granted) "granted" else "denied"}")
                 if (!granted) toast(getString(R.string.camera_permission_denied))
+            }
+            result[android.Manifest.permission.RECORD_AUDIO]?.let { granted ->
+                vm.log("microphone: host permission ${if (granted) "granted" else "denied"}")
+                if (!granted) toast(getString(R.string.microphone_permission_denied))
             }
             val bluetooth = result.filterKeys { it in BluetoothPermissions.required() }
             if (bluetooth.isNotEmpty()) {
@@ -321,6 +325,9 @@ class VmActivity : ComponentActivity() {
             if (s.camera && vm.cameraSupported &&
                 checkSelfPermission(android.Manifest.permission.CAMERA) != android.content.pm.PackageManager.PERMISSION_GRANTED)
                 add(android.Manifest.permission.CAMERA)
+            if (s.microphone && vm.microphoneSupported &&
+                checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != android.content.pm.PackageManager.PERMISSION_GRANTED)
+                add(android.Manifest.permission.RECORD_AUDIO)
             if (s.bluetooth && vm.bluetoothSupported) addAll(BluetoothPermissions.missing(this@VmActivity))
         }
         if (needed.isNotEmpty() && (vm.state == GuestVm.State.STOPPED || vm.state == GuestVm.State.FAILED)) {
@@ -348,13 +355,13 @@ class VmActivity : ComponentActivity() {
         hostUi = app.aemu.AppPrefs.hostUiOptions(this)
         applyCutoutBarrier()
         orientationListener?.enable()
-        if (::vm.isInitialized) { vm.cameraVisible(true); vm.motionVisible(true) }
+        if (::vm.isInitialized) { vm.cameraVisible(true); vm.micVisible(true); vm.motionVisible(true) }
     }
 
     override fun onPause() {
         orientationListener?.disable()
         heldNavKeys.releaseAll()
-        if (::vm.isInitialized) { vm.cameraVisible(false); vm.motionVisible(false) }
+        if (::vm.isInitialized) { vm.cameraVisible(false); vm.micVisible(false); vm.motionVisible(false) }
         super.onPause()
     }
 

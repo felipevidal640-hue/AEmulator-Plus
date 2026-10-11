@@ -99,6 +99,10 @@ class GuestVm(val ctx: Context, val img: GuestImage, val lowPowerBoot: Boolean =
     val cameraSupported get() = engine == Engine.KK && img.api in 14..25 && !recoveryMode && !nativeUi
     private val camera = HostCameraBridge(ctx, paths, { settings.camera && cameraSupported }, ::log)
     fun cameraVisible(visible: Boolean) { camera.visible(visible) }
+    /** 4.x-прошивки пишут через входной поток нашего HAL; 2.x-движок входной поток не отдаёт. */
+    val microphoneSupported get() = engine == Engine.KK && img.api in 14..25 && !recoveryMode && !nativeUi
+    private val microphone = MicBridge(ctx, paths, { settings.microphone && microphoneSupported }, ::log)
+    fun micVisible(visible: Boolean) { microphone.visible(visible) }
     val bluetoothSupported get() = engine == Engine.KK && img.api in 9..25 && !recoveryMode && !nativeUi
     private val bluetooth = BluetoothBridge(ctx, paths, { settings.bluetooth && bluetoothSupported }, ::log)
     val wifiSupported get() = WifiEmu.supported(engine, img.api, recoveryMode, nativeUi)
@@ -559,6 +563,7 @@ class GuestVm(val ctx: Context, val img: GuestImage, val lowPowerBoot: Boolean =
         vibration.serve()
         motion.serve()
         if (s.camera && cameraSupported) camera.serve()
+        if (s.microphone && microphoneSupported) microphone.serve()
         if (s.bluetooth && bluetoothSupported) bluetooth.serve()
         frames.serve()
         if (s.radio) ril.serve() else log("radio: emulation disabled in settings")
@@ -1244,6 +1249,7 @@ class GuestVm(val ctx: Context, val img: GuestImage, val lowPowerBoot: Boolean =
         vibration.stop()
         battery.stop()
         camera.stop()
+        microphone.stop()
         bluetooth.stop()
         motion.stop()
         runCatching { guestRunner.run(listOf("/system/bin/sync"), 5_000) }
