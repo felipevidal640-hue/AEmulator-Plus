@@ -37,6 +37,8 @@ data class VmSettings(
     val hostBattery: Boolean = true,
     /** Explicit host-camera opt-in; applies at the next full VM boot. */
     val camera: Boolean = false,
+    /** Explicit host-microphone opt-in (guest app records from the phone microphone); applies at the next full VM boot. */
+    val microphone: Boolean = false,
     /** Experimental host Bluetooth passthrough (scan, RFCOMM, GATT); applies at the next full VM boot. */
     val bluetooth: Boolean = false,
     val motionSensors: Boolean = false,
@@ -88,6 +90,7 @@ data class VmSettings(
         .put("vibration", vibration)
         .put("hostBattery", hostBattery)
         .put("camera", camera)
+        .put("microphone", microphone)
         .put("bluetooth", bluetooth)
         .put("motionSensors", motionSensors).put("gyroLock", gyroLock).put("hostResolution", hostResolution)
         .put("skipSetupWizard", skipSetupWizard)
@@ -180,6 +183,7 @@ data class VmSettings(
                 vibration = o.optBoolean("vibration", d.vibration),
                 hostBattery = o.optBoolean("hostBattery", d.hostBattery),
                 camera = o.optBoolean("camera", d.camera),
+                microphone = o.optBoolean("microphone", d.microphone),
                 bluetooth = o.optBoolean("bluetooth", d.bluetooth),
                 motionSensors = o.optBoolean("motionSensors", false),
                 gyroLock = GyroLock.sanitize(o.optInt("gyroLock", GyroLock.DISABLED)),

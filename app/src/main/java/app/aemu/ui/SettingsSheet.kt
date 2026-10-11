@@ -153,6 +153,9 @@ fun SettingsSheet(img: GuestImage, onDismiss: () -> Unit, onSave: (VmSettings) -
             if (img.api in 14..25) {
                 Toggle(stringResource(R.string.vs_camera), stringResource(R.string.vs_camera_sub), s.camera) { s = s.copy(camera = it) }
             }
+            if (img.api in 14..25) {
+                Toggle(stringResource(R.string.vs_microphone), stringResource(R.string.vs_microphone_sub), s.microphone) { s = s.copy(microphone = it) }
+            }
 
             Spacer(Modifier.height(8.dp))
             Text(stringResource(R.string.vs_radio_title), style = MaterialTheme.typography.titleMedium)
